@@ -5,7 +5,7 @@ import "./globals.css";
 const geist = Geist({ subsets: ["latin"], variable: "--font-geist" });
 
 export const metadata: Metadata = {
-  title: "Che-sif-App",
+  title: "ChesifApp?",
   description: "Organizza, conferma, dividi. L'app per gli eventi tra amici senza stress.",
   icons: { icon: "/logo.svg", apple: "/logo.svg" },
 };
