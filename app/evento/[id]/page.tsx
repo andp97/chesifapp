@@ -5,6 +5,7 @@ import { updateParticipantStatus } from "@/lib/actions";
 import { ParticipantStatus, PaymentStatus } from "@/app/generated/prisma/enums";
 import type { Participant } from "@/app/generated/prisma/client";
 import { InviteCodeForm } from "@/components/InviteCodeForm";
+import { formatEventDate } from "@/lib/dates";
 
 export default async function EventPage({
   params,
@@ -45,9 +46,16 @@ export default async function EventPage({
     <main className="min-h-screen p-4 max-w-lg mx-auto py-8">
       <div className="mb-6">
         <h1 className="text-3xl font-bold text-gray-900">{event.name}</h1>
-        <p className="text-sm text-gray-400 mt-1">
-          {total} partecipant{total === 1 ? "e" : "i"}
-        </p>
+        <div className="flex items-center gap-3 mt-1 flex-wrap">
+          {formatEventDate(event.startDate, event.endDate) && (
+            <span className="text-sm text-blue-600 font-medium">
+              📅 {formatEventDate(event.startDate, event.endDate)}
+            </span>
+          )}
+          <p className="text-sm text-gray-400">
+            {total} partecipant{total === 1 ? "e" : "i"}
+          </p>
+        </div>
       </div>
 
       {/* Cost card */}

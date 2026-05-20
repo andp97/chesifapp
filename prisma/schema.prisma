@@ -14,6 +14,8 @@ model Event {
   adminCode    String        @unique
   inviteCode   String        @unique
   paymentInfo  String        @db.Text
+  startDate    DateTime?
+  endDate      DateTime?
   createdAt    DateTime      @default(now())
   participants Participant[]
 }

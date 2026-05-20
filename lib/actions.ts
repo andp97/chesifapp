@@ -7,6 +7,7 @@ import { prisma } from "@/lib/prisma";
 import { ulid } from "ulid";
 import { generateInviteCode, generateAdminCode } from "@/lib/codes";
 import type { ParticipantStatus, PaymentStatus } from "@/app/generated/prisma/enums";
+import { parseLocalDate } from "@/lib/dates";
 
 // ─── Event ────────────────────────────────────────────────────────────────────
 
@@ -14,6 +15,10 @@ export async function createEvent(formData: FormData) {
   const name = formData.get("name") as string;
   const totalCost = parseFloat(formData.get("totalCost") as string);
   const paymentInfo = (formData.get("paymentInfo") as string) ?? "";
+  const startDateRaw = formData.get("startDate") as string | null;
+  const endDateRaw = formData.get("endDate") as string | null;
+  const startDate = startDateRaw ? parseLocalDate(startDateRaw) : null;
+  const endDate = endDateRaw ? parseLocalDate(endDateRaw) : null;
 
   if (!name || isNaN(totalCost)) throw new Error("Dati non validi");
 
@@ -33,7 +38,7 @@ export async function createEvent(formData: FormData) {
   }
 
   const event = await prisma.event.create({
-    data: { id: ulid(), name, totalCost, paymentInfo, inviteCode: inviteCode!, adminCode: adminCode! },
+    data: { id: ulid(), name, totalCost, paymentInfo, startDate, endDate, inviteCode: inviteCode!, adminCode: adminCode! },
   });
 
   // auto-login as admin
@@ -54,10 +59,14 @@ export async function updateEvent(eventId: string, formData: FormData) {
   const name = formData.get("name") as string;
   const totalCost = parseFloat(formData.get("totalCost") as string);
   const paymentInfo = (formData.get("paymentInfo") as string) ?? "";
+  const startDateRaw = formData.get("startDate") as string | null;
+  const endDateRaw = formData.get("endDate") as string | null;
+  const startDate = startDateRaw ? parseLocalDate(startDateRaw) : null;
+  const endDate = endDateRaw ? parseLocalDate(endDateRaw) : null;
 
   await prisma.event.update({
     where: { id: eventId },
-    data: { name, totalCost, paymentInfo },
+    data: { name, totalCost, paymentInfo, startDate, endDate },
   });
 
   revalidatePath(`/evento/${eventId}/admin`);

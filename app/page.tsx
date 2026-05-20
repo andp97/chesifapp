@@ -43,6 +43,31 @@ export default function Home() {
 
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-1">
+                Data{" "}
+                <span className="text-gray-400 font-normal">(opzionale)</span>
+              </label>
+              <div className="grid grid-cols-2 gap-2">
+                <div>
+                  <label className="block text-xs text-gray-500 mb-1">Inizio</label>
+                  <input
+                    name="startDate"
+                    type="date"
+                    className="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  />
+                </div>
+                <div>
+                  <label className="block text-xs text-gray-500 mb-1">Fine (se periodo)</label>
+                  <input
+                    name="endDate"
+                    type="date"
+                    className="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  />
+                </div>
+              </div>
+            </div>
+
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">
                 Info pagamento{" "}
                 <span className="text-gray-400 font-normal">(opzionale)</span>
               </label>

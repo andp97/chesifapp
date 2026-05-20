@@ -11,6 +11,7 @@ import { ParticipantStatus, PaymentStatus } from "@/app/generated/prisma/enums";
 import type { Participant } from "@/app/generated/prisma/client";
 import { CopyButton } from "@/components/CopyButton";
 import { AdminCodeForm } from "@/components/AdminCodeForm";
+import { formatEventDate, toInputDate } from "@/lib/dates";
 
 export default async function AdminPage({
   params,
@@ -50,6 +51,11 @@ export default async function AdminPage({
             Pannello Admin
           </p>
           <h1 className="text-2xl font-bold text-gray-900">{event.name}</h1>
+          {formatEventDate(event.startDate, event.endDate) && (
+            <p className="text-sm text-blue-600 font-medium mt-0.5">
+              📅 {formatEventDate(event.startDate, event.endDate)}
+            </p>
+          )}
         </div>
         <a
           href={`/evento/${id}`}
@@ -169,6 +175,32 @@ export default async function AdminPage({
               defaultValue={event.totalCost}
               className="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
             />
+          </div>
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-1">
+              Data{" "}
+              <span className="text-gray-400 font-normal">(opzionale)</span>
+            </label>
+            <div className="grid grid-cols-2 gap-2">
+              <div>
+                <label className="block text-xs text-gray-500 mb-1">Inizio</label>
+                <input
+                  name="startDate"
+                  type="date"
+                  defaultValue={event.startDate ? toInputDate(event.startDate) : ""}
+                  className="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+                />
+              </div>
+              <div>
+                <label className="block text-xs text-gray-500 mb-1">Fine (se periodo)</label>
+                <input
+                  name="endDate"
+                  type="date"
+                  defaultValue={event.endDate ? toInputDate(event.endDate) : ""}
+                  className="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+                />
+              </div>
+            </div>
           </div>
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-1">
