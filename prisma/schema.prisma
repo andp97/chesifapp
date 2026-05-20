@@ -8,7 +8,7 @@ datasource db {
 }
 
 model Event {
-  id           String        @id @default(cuid())
+  id           String        @id
   name         String
   totalCost    Float
   adminCode    String        @unique

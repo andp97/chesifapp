@@ -4,6 +4,7 @@ import { redirect } from "next/navigation";
 import { cookies } from "next/headers";
 import { revalidatePath } from "next/cache";
 import { prisma } from "@/lib/prisma";
+import { ulid } from "ulid";
 import { generateInviteCode, generateAdminCode } from "@/lib/codes";
 import type { ParticipantStatus, PaymentStatus } from "@/app/generated/prisma/enums";
 
@@ -32,7 +33,7 @@ export async function createEvent(formData: FormData) {
   }
 
   const event = await prisma.event.create({
-    data: { name, totalCost, paymentInfo, inviteCode: inviteCode!, adminCode: adminCode! },
+    data: { id: ulid(), name, totalCost, paymentInfo, inviteCode: inviteCode!, adminCode: adminCode! },
   });
 
   // auto-login as admin
