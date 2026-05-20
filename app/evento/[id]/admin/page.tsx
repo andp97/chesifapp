@@ -13,6 +13,9 @@ import { CopyButton } from "@/components/CopyButton";
 import { AdminCodeForm } from "@/components/AdminCodeForm";
 import { formatEventDate, toInputDate } from "@/lib/dates";
 
+const dateInputCls =
+  "w-full appearance-none rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm text-gray-900 focus:outline-none focus:ring-2 focus:ring-blue-500 [color-scheme:light]";
+
 export default async function AdminPage({
   params,
 }: {
@@ -188,7 +191,7 @@ export default async function AdminPage({
                   name="startDate"
                   type="date"
                   defaultValue={event.startDate ? toInputDate(event.startDate) : ""}
-                  className="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  className={dateInputCls}
                 />
               </div>
               <div>
@@ -197,7 +200,7 @@ export default async function AdminPage({
                   name="endDate"
                   type="date"
                   defaultValue={event.endDate ? toInputDate(event.endDate) : ""}
-                  className="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  className={dateInputCls}
                 />
               </div>
             </div>

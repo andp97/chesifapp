@@ -1,6 +1,9 @@
 import Image from "next/image";
 import { createEvent } from "@/lib/actions";
 
+const dateInputCls =
+  "w-full appearance-none rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm text-gray-900 focus:outline-none focus:ring-2 focus:ring-blue-500 [color-scheme:light]";
+
 export default function Home() {
   return (
     <main className="min-h-screen flex items-center justify-center p-4">
@@ -51,19 +54,11 @@ export default function Home() {
               <div className="grid grid-cols-2 gap-2">
                 <div>
                   <label className="block text-xs text-gray-500 mb-1">Inizio</label>
-                  <input
-                    name="startDate"
-                    type="date"
-                    className="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
-                  />
+                  <input name="startDate" type="date" className={dateInputCls} />
                 </div>
                 <div>
                   <label className="block text-xs text-gray-500 mb-1">Fine (se periodo)</label>
-                  <input
-                    name="endDate"
-                    type="date"
-                    className="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
-                  />
+                  <input name="endDate" type="date" className={dateInputCls} />
                 </div>
               </div>
             </div>
