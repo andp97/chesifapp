@@ -13,8 +13,11 @@ import { CopyButton } from "@/components/CopyButton";
 import { AdminCodeForm } from "@/components/AdminCodeForm";
 import { formatEventDate, toInputDate } from "@/lib/dates";
 
+const inputCls =
+  "w-full rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 px-3 py-2 text-sm text-gray-900 dark:text-white placeholder-gray-400 dark:placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500";
+
 const dateInputCls =
-  "w-full appearance-none rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm text-gray-900 focus:outline-none focus:ring-2 focus:ring-blue-500 [color-scheme:light]";
+  "w-full appearance-none rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 px-3 py-2 text-sm text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500 [color-scheme:light] dark:[color-scheme:dark]";
 
 export default async function AdminPage({
   params,
@@ -50,19 +53,19 @@ export default async function AdminPage({
     <main className="min-h-screen p-4 max-w-lg mx-auto py-8">
       <div className="flex items-center justify-between mb-6">
         <div>
-          <p className="text-xs text-blue-600 font-medium uppercase tracking-wide mb-1">
+          <p className="text-xs text-blue-600 dark:text-blue-400 font-medium uppercase tracking-wide mb-1">
             Pannello Admin
           </p>
-          <h1 className="text-2xl font-bold text-gray-900">{event.name}</h1>
+          <h1 className="text-2xl font-bold">{event.name}</h1>
           {formatEventDate(event.startDate, event.endDate) && (
-            <p className="text-sm text-blue-600 font-medium mt-0.5">
+            <p className="text-sm text-blue-600 dark:text-blue-400 font-medium mt-0.5">
               📅 {formatEventDate(event.startDate, event.endDate)}
             </p>
           )}
         </div>
         <a
           href={`/evento/${id}`}
-          className="text-sm text-gray-500 hover:text-gray-700 underline"
+          className="text-sm text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-200 underline"
         >
           Vista pubblica
         </a>
@@ -76,24 +79,24 @@ export default async function AdminPage({
       </div>
 
       {/* Codes */}
-      <div className="bg-white rounded-2xl border border-gray-200 shadow-sm p-5 mb-6 space-y-4">
-        <h2 className="font-semibold text-gray-900">Codici evento</h2>
+      <div className="bg-white dark:bg-gray-900 rounded-2xl border border-gray-200 dark:border-gray-700 shadow-sm p-5 mb-6 space-y-4">
+        <h2 className="font-semibold">Codici evento</h2>
 
         <div>
-          <p className="text-xs font-medium text-gray-500 mb-1.5">
+          <p className="text-xs font-medium text-gray-500 dark:text-gray-400 mb-1.5">
             LINK + CODICE INVITO — condividi con i partecipanti
           </p>
           <div className="flex gap-2 mb-2">
             <input
               readOnly
               value={shareUrl}
-              className="flex-1 rounded-lg border border-gray-200 px-3 py-2 text-sm bg-gray-50 text-gray-600 min-w-0"
+              className="flex-1 rounded-lg border border-gray-200 dark:border-gray-600 px-3 py-2 text-sm bg-gray-50 dark:bg-gray-800 text-gray-600 dark:text-gray-300 min-w-0"
             />
             <CopyButton text={shareUrl} />
           </div>
           <div className="flex items-center gap-2">
-            <span className="text-xs text-gray-500">Codice invito:</span>
-            <code className="bg-amber-50 border border-amber-200 rounded-lg px-3 py-1 text-sm font-mono font-bold tracking-widest text-amber-800">
+            <span className="text-xs text-gray-500 dark:text-gray-400">Codice invito:</span>
+            <code className="bg-amber-50 dark:bg-amber-900/20 border border-amber-200 dark:border-amber-700 rounded-lg px-3 py-1 text-sm font-mono font-bold tracking-widest text-amber-800 dark:text-amber-300">
               {event.inviteCode}
             </code>
             <CopyButton text={event.inviteCode} label="Copia codice" />
@@ -101,11 +104,11 @@ export default async function AdminPage({
         </div>
 
         <div>
-          <p className="text-xs font-medium text-gray-500 mb-1.5">
+          <p className="text-xs font-medium text-gray-500 dark:text-gray-400 mb-1.5">
             CODICE ADMIN — tienilo segreto
           </p>
           <div className="flex items-center gap-2">
-            <code className="bg-gray-50 border border-gray-200 rounded-lg px-3 py-1.5 text-sm font-mono font-bold tracking-widest text-gray-700 flex-1">
+            <code className="bg-gray-50 dark:bg-gray-800 border border-gray-200 dark:border-gray-600 rounded-lg px-3 py-1.5 text-sm font-mono font-bold tracking-widest text-gray-700 dark:text-gray-300 flex-1">
               {event.adminCode}
             </code>
             <CopyButton text={event.adminCode} label="Copia" />
@@ -114,15 +117,15 @@ export default async function AdminPage({
       </div>
 
       {/* Add participant */}
-      <div className="bg-white rounded-2xl border border-gray-200 shadow-sm p-5 mb-6">
-        <h2 className="font-semibold text-gray-900 mb-3">Aggiungi partecipante</h2>
+      <div className="bg-white dark:bg-gray-900 rounded-2xl border border-gray-200 dark:border-gray-700 shadow-sm p-5 mb-6">
+        <h2 className="font-semibold mb-3">Aggiungi partecipante</h2>
         <form action={addParticipant.bind(null, id)} className="flex gap-2">
           <input
             name="name"
             type="text"
             required
             placeholder="Nome e cognome"
-            className="flex-1 rounded-lg border border-gray-300 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+            className={`${inputCls} flex-1`}
           />
           <button
             type="submit"
@@ -134,14 +137,14 @@ export default async function AdminPage({
       </div>
 
       {/* Participant list */}
-      <div className="bg-white rounded-2xl border border-gray-200 shadow-sm overflow-hidden mb-6">
-        <div className="px-5 py-4 border-b border-gray-100">
-          <h2 className="font-semibold text-gray-900">Partecipanti</h2>
+      <div className="bg-white dark:bg-gray-900 rounded-2xl border border-gray-200 dark:border-gray-700 shadow-sm overflow-hidden mb-6">
+        <div className="px-5 py-4 border-b border-gray-100 dark:border-gray-700">
+          <h2 className="font-semibold">Partecipanti</h2>
         </div>
         {event.participants.length === 0 ? (
-          <p className="px-5 py-4 text-sm text-gray-400">Nessun partecipante ancora.</p>
+          <p className="px-5 py-4 text-sm text-gray-400 dark:text-gray-500">Nessun partecipante ancora.</p>
         ) : (
-          <ul className="divide-y divide-gray-100">
+          <ul className="divide-y divide-gray-100 dark:divide-gray-700">
             {event.participants.map((p) => (
               <AdminParticipantRow key={p.id} participant={p} eventId={id} />
             ))}
@@ -150,23 +153,17 @@ export default async function AdminPage({
       </div>
 
       {/* Edit event */}
-      <div className="bg-white rounded-2xl border border-gray-200 shadow-sm p-5">
-        <h2 className="font-semibold text-gray-900 mb-4">Modifica evento</h2>
+      <div className="bg-white dark:bg-gray-900 rounded-2xl border border-gray-200 dark:border-gray-700 shadow-sm p-5">
+        <h2 className="font-semibold mb-4">Modifica evento</h2>
         <form action={updateEvent.bind(null, id)} className="space-y-3">
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">
+            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
               Nome evento
             </label>
-            <input
-              name="name"
-              type="text"
-              required
-              defaultValue={event.name}
-              className="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
-            />
+            <input name="name" type="text" required defaultValue={event.name} className={inputCls} />
           </div>
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">
+            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
               Costo totale (€)
             </label>
             <input
@@ -176,17 +173,17 @@ export default async function AdminPage({
               min="0"
               step="0.01"
               defaultValue={event.totalCost}
-              className="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className={inputCls}
             />
           </div>
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">
+            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
               Data{" "}
-              <span className="text-gray-400 font-normal">(opzionale)</span>
+              <span className="text-gray-400 dark:text-gray-500 font-normal">(opzionale)</span>
             </label>
             <div className="grid grid-cols-2 gap-2">
               <div>
-                <label className="block text-xs text-gray-500 mb-1">Inizio</label>
+                <label className="block text-xs text-gray-500 dark:text-gray-400 mb-1">Inizio</label>
                 <input
                   name="startDate"
                   type="date"
@@ -195,7 +192,7 @@ export default async function AdminPage({
                 />
               </div>
               <div>
-                <label className="block text-xs text-gray-500 mb-1">Fine (se periodo)</label>
+                <label className="block text-xs text-gray-500 dark:text-gray-400 mb-1">Fine (se periodo)</label>
                 <input
                   name="endDate"
                   type="date"
@@ -206,19 +203,19 @@ export default async function AdminPage({
             </div>
           </div>
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">
+            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
               Info pagamento
             </label>
             <textarea
               name="paymentInfo"
               rows={3}
               defaultValue={event.paymentInfo}
-              className="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 resize-none"
+              className={`${inputCls} resize-none`}
             />
           </div>
           <button
             type="submit"
-            className="w-full bg-gray-800 hover:bg-gray-900 text-white font-medium rounded-lg py-2 text-sm transition-colors"
+            className="w-full bg-gray-800 dark:bg-gray-700 hover:bg-gray-900 dark:hover:bg-gray-600 text-white font-medium rounded-lg py-2 text-sm transition-colors"
           >
             Salva modifiche
           </button>
@@ -230,24 +227,18 @@ export default async function AdminPage({
 
 // ─── Sub-components ───────────────────────────────────────────────────────────
 
-function AdminCodeGate({
-  eventId,
-  eventName,
-}: {
-  eventId: string;
-  eventName: string;
-}) {
+function AdminCodeGate({ eventId, eventName }: { eventId: string; eventName: string }) {
   return (
     <main className="min-h-screen flex items-center justify-center p-4">
       <div className="w-full max-w-sm">
         <div className="text-center mb-6">
-          <h1 className="text-2xl font-bold text-gray-900">{eventName}</h1>
-          <p className="text-sm text-gray-500 mt-1">Area organizzatore</p>
+          <h1 className="text-2xl font-bold">{eventName}</h1>
+          <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">Area organizzatore</p>
         </div>
-        <div className="bg-white rounded-2xl border border-gray-200 shadow-sm p-6">
+        <div className="bg-white dark:bg-gray-900 rounded-2xl border border-gray-200 dark:border-gray-700 shadow-sm p-6">
           <AdminCodeForm eventId={eventId} />
         </div>
-        <p className="text-center text-xs text-gray-400 mt-4">
+        <p className="text-center text-xs text-gray-400 dark:text-gray-500 mt-4">
           <a href={`/evento/${eventId}`} className="hover:underline">
             ← Torna alla vista pubblica
           </a>
@@ -257,13 +248,7 @@ function AdminCodeGate({
   );
 }
 
-function AdminParticipantRow({
-  participant: p,
-  eventId,
-}: {
-  participant: Participant;
-  eventId: string;
-}) {
+function AdminParticipantRow({ participant: p, eventId }: { participant: Participant; eventId: string }) {
   const nextPaymentStatus =
     p.paymentStatus === PaymentStatus.PAID ? PaymentStatus.UNPAID : PaymentStatus.PAID;
 
@@ -271,7 +256,7 @@ function AdminParticipantRow({
     <li className="px-5 py-3">
       <div className="flex items-center justify-between gap-2">
         <div className="min-w-0 flex-1">
-          <p className="font-medium text-gray-900 truncate">{p.name}</p>
+          <p className="font-medium truncate">{p.name}</p>
           <div className="flex gap-2 mt-1 flex-wrap">
             <StatusBadge status={p.status} />
             <PaymentBadge paymentStatus={p.paymentStatus} />
@@ -284,7 +269,7 @@ function AdminParticipantRow({
               className={`px-2.5 py-1 rounded-lg text-xs font-medium transition-colors ${
                 p.paymentStatus === PaymentStatus.PAID
                   ? "bg-emerald-600 text-white hover:bg-emerald-700"
-                  : "bg-gray-100 text-gray-600 hover:bg-emerald-100"
+                  : "bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-300 hover:bg-emerald-100 dark:hover:bg-emerald-900/30"
               }`}
             >
               {p.paymentStatus === PaymentStatus.PAID ? "Pagato ✓" : "Segna pagato"}
@@ -293,7 +278,7 @@ function AdminParticipantRow({
           <form action={removeParticipant.bind(null, p.id, eventId)}>
             <button
               type="submit"
-              className="px-2 py-1 rounded-lg text-xs text-gray-400 hover:bg-red-50 hover:text-red-600 transition-colors"
+              className="px-2 py-1 rounded-lg text-xs text-gray-400 hover:bg-red-50 dark:hover:bg-red-900/20 hover:text-red-600 dark:hover:text-red-400 transition-colors"
             >
               ✕
             </button>
@@ -304,49 +289,33 @@ function AdminParticipantRow({
   );
 }
 
-function StatCard({
-  label,
-  value,
-  color = "blue",
-}: {
-  label: string;
-  value: number;
-  color?: "blue" | "green" | "emerald";
-}) {
-  const colorMap = {
-    blue: "text-blue-600",
-    green: "text-green-600",
-    emerald: "text-emerald-600",
-  };
+function StatCard({ label, value, color = "blue" }: { label: string; value: number; color?: "blue" | "green" | "emerald" }) {
+  const colorMap = { blue: "text-blue-600 dark:text-blue-400", green: "text-green-600 dark:text-green-400", emerald: "text-emerald-600 dark:text-emerald-400" };
   return (
-    <div className="bg-white rounded-xl border border-gray-200 p-3 text-center">
+    <div className="bg-white dark:bg-gray-900 rounded-xl border border-gray-200 dark:border-gray-700 p-3 text-center">
       <p className={`text-2xl font-bold ${colorMap[color]}`}>{value}</p>
-      <p className="text-xs text-gray-500 mt-0.5">{label}</p>
+      <p className="text-xs text-gray-500 dark:text-gray-400 mt-0.5">{label}</p>
     </div>
   );
 }
 
 function StatusBadge({ status }: { status: ParticipantStatus }) {
   const map: Record<ParticipantStatus, { label: string; className: string }> = {
-    PENDING: { label: "In attesa", className: "bg-gray-100 text-gray-500" },
-    CONFIRMED: { label: "Confermato", className: "bg-green-100 text-green-700" },
-    DECLINED: { label: "Non viene", className: "bg-red-100 text-red-700" },
+    PENDING: { label: "In attesa", className: "bg-gray-100 dark:bg-gray-700 text-gray-500 dark:text-gray-400" },
+    CONFIRMED: { label: "Confermato", className: "bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-400" },
+    DECLINED: { label: "Non viene", className: "bg-red-100 dark:bg-red-900/30 text-red-700 dark:text-red-400" },
   };
   const { label, className } = map[status];
-  return (
-    <span className={`rounded-full px-2 py-0.5 text-xs font-medium ${className}`}>
-      {label}
-    </span>
-  );
+  return <span className={`rounded-full px-2 py-0.5 text-xs font-medium ${className}`}>{label}</span>;
 }
 
 function PaymentBadge({ paymentStatus }: { paymentStatus: PaymentStatus }) {
   return paymentStatus === PaymentStatus.PAID ? (
-    <span className="rounded-full px-2 py-0.5 text-xs font-medium bg-emerald-100 text-emerald-700">
+    <span className="rounded-full px-2 py-0.5 text-xs font-medium bg-emerald-100 dark:bg-emerald-900/30 text-emerald-700 dark:text-emerald-400">
       Pagato ✓
     </span>
   ) : (
-    <span className="rounded-full px-2 py-0.5 text-xs font-medium bg-yellow-100 text-yellow-700">
+    <span className="rounded-full px-2 py-0.5 text-xs font-medium bg-yellow-100 dark:bg-yellow-900/30 text-yellow-700 dark:text-yellow-400">
       Da pagare
     </span>
   );
