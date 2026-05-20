@@ -8,6 +8,11 @@ export const metadata: Metadata = {
   title: "ChesifApp?",
   description: "Organizza, conferma, dividi. L'app per gli eventi tra amici senza stress.",
   icons: { icon: "/logo.svg", apple: "/logo.svg" },
+  twitter: {
+    card: "summary_large_image",
+    title: "ChesifApp?",
+    description: "Organizza, conferma, dividi. L'app per gli eventi tra amici senza stress.",
+  },
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
