@@ -1,3 +1,4 @@
+import Image from "next/image";
 import { createEvent } from "@/lib/actions";
 
 export default function Home() {
@@ -5,7 +6,8 @@ export default function Home() {
     <main className="min-h-screen flex items-center justify-center p-4">
       <div className="w-full max-w-md">
         <div className="text-center mb-8">
-          <h1 className="text-4xl font-bold text-gray-900">Che si fa? 🎉</h1>
+          <Image src="/logo.svg" alt="Che si fa?" width={72} height={72} className="mx-auto mb-4" />
+          <h1 className="text-4xl font-bold text-gray-900">Che si fa?</h1>
           <p className="mt-2 text-gray-500">Organizza un evento, dividi le spese.</p>
         </div>
 
