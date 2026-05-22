@@ -11,7 +11,29 @@ import { parseLocalDate } from "@/lib/dates";
 
 // ─── Event ────────────────────────────────────────────────────────────────────
 
-export async function createEvent(formData: FormData) {
+async function verifyTurnstile(token: string): Promise<boolean> {
+  try {
+    const res = await fetch("https://challenges.cloudflare.com/turnstile/v0/siteverify", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ secret: process.env.TURNSTILE_SECRET_KEY, response: token }),
+    });
+    const data = await res.json();
+    return data.success === true;
+  } catch {
+    return false;
+  }
+}
+
+export async function createEvent(
+  _prevState: { error?: string },
+  formData: FormData
+): Promise<{ error?: string }> {
+  const token = formData.get("cf-turnstile-response") as string;
+  if (!token || !(await verifyTurnstile(token))) {
+    return { error: "Verifica anti-spam fallita. Riprova." };
+  }
+
   const name = formData.get("name") as string;
   const totalCost = parseFloat(formData.get("totalCost") as string);
   const paymentInfo = (formData.get("paymentInfo") as string) ?? "";
@@ -20,7 +42,7 @@ export async function createEvent(formData: FormData) {
   const startDate = startDateRaw ? parseLocalDate(startDateRaw) : null;
   const endDate = endDateRaw ? parseLocalDate(endDateRaw) : null;
 
-  if (!name || isNaN(totalCost)) throw new Error("Dati non validi");
+  if (!name || isNaN(totalCost)) return { error: "Dati non validi" };
 
   let inviteCode: string;
   let adminCode: string;
