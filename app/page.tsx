@@ -1,5 +1,6 @@
 import Image from "next/image";
 import { createEvent } from "@/lib/actions";
+import { SubmitButton } from "@/components/SubmitButton";
 
 const inputCls =
   "w-full rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 px-3 py-2 text-sm text-gray-900 dark:text-white placeholder-gray-400 dark:placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500";
@@ -79,12 +80,7 @@ export default function Home() {
               />
             </div>
 
-            <button
-              type="submit"
-              className="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-lg py-2.5 text-sm transition-colors"
-            >
-              Crea evento →
-            </button>
+            <SubmitButton label="Crea evento →" loadingLabel="Creazione in corso…" />
           </form>
         </div>
 
