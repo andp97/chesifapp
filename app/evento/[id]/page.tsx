@@ -27,6 +27,9 @@ export default async function EventPage({
   const confirmed = event.participants.filter(
     (p) => p.status === ParticipantStatus.CONFIRMED
   ).length;
+  const pending = event.participants.filter(
+    (p) => p.status === ParticipantStatus.PENDING
+  ).length;
   const total = event.participants.length;
   const costPerPerson =
     confirmed > 0
@@ -80,8 +83,13 @@ export default async function EventPage({
 
       {/* Participant list */}
       <div className="bg-white dark:bg-gray-900 rounded-2xl border border-gray-200 dark:border-gray-700 shadow-sm overflow-hidden mb-6">
-        <div className="px-5 py-4 border-b border-gray-100 dark:border-gray-700">
+        <div className="px-5 py-4 border-b border-gray-100 dark:border-gray-700 flex items-center justify-between">
           <h2 className="font-semibold">Partecipanti</h2>
+          {pending > 0 && (
+            <span className="text-xs text-gray-500 dark:text-gray-400">
+              {pending} in attesa
+            </span>
+          )}
         </div>
         {event.participants.length === 0 ? (
           <p className="px-5 py-4 text-sm text-gray-400 dark:text-gray-500">
