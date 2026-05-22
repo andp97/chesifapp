@@ -6,6 +6,7 @@ import { ParticipantStatus, PaymentStatus } from "@/app/generated/prisma/enums";
 import { CopyButton } from "@/components/CopyButton";
 import { AdminCodeForm } from "@/components/AdminCodeForm";
 import { AdminParticipantSection } from "@/components/AdminParticipantSection";
+import { ShareRecapButton } from "@/components/ShareRecapButton";
 import { formatEventDate, toInputDate } from "@/lib/dates";
 
 const inputCls =
@@ -75,7 +76,22 @@ export default async function AdminPage({
 
       {/* Codes */}
       <div className="bg-white dark:bg-gray-900 rounded-2xl border border-gray-200 dark:border-gray-700 shadow-sm p-5 mb-6 space-y-4">
-        <h2 className="font-semibold">Codici evento</h2>
+        <div className="flex items-center justify-between">
+          <h2 className="font-semibold">Codici evento</h2>
+          <ShareRecapButton
+            eventName={event.name}
+            totalCost={event.totalCost}
+            formattedDate={formatEventDate(event.startDate, event.endDate)}
+            paymentInfo={event.paymentInfo}
+            participants={event.participants.map((p) => ({
+              name: p.name,
+              status: p.status,
+              paymentStatus: p.paymentStatus,
+              quotes: p.quotes,
+            }))}
+            shareUrl={shareUrl}
+          />
+        </div>
 
         <div>
           <p className="text-xs font-medium text-gray-500 dark:text-gray-400 mb-1.5">
