@@ -165,40 +165,39 @@ function ParticipantRow({
               <PaymentBadge paymentStatus={p.paymentStatus} />
             </div>
           )}
+          {hasAccess && (
+            <div className="flex gap-2 mt-2">
+              <form
+                action={updateParticipantStatus.bind(null, p.id, ParticipantStatus.CONFIRMED, eventId)}
+              >
+                <FormButton
+                  type="submit"
+                  className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-colors disabled:opacity-50 ${
+                    p.status === ParticipantStatus.CONFIRMED
+                      ? "bg-green-600 text-white"
+                      : "bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-300 hover:bg-green-100 dark:hover:bg-green-900/30"
+                  }`}
+                >
+                  Confermo ✓
+                </FormButton>
+              </form>
+              <form
+                action={updateParticipantStatus.bind(null, p.id, ParticipantStatus.DECLINED, eventId)}
+              >
+                <FormButton
+                  type="submit"
+                  className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-colors disabled:opacity-50 ${
+                    p.status === ParticipantStatus.DECLINED
+                      ? "bg-red-600 text-white"
+                      : "bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-300 hover:bg-red-100 dark:hover:bg-red-900/30"
+                  }`}
+                >
+                  Non vengo ✗
+                </FormButton>
+              </form>
+            </div>
+          )}
         </div>
-
-        {hasAccess && (
-          <div className="flex gap-2 shrink-0">
-            <form
-              action={updateParticipantStatus.bind(null, p.id, ParticipantStatus.CONFIRMED, eventId)}
-            >
-              <FormButton
-                type="submit"
-                className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-colors disabled:opacity-50 ${
-                  p.status === ParticipantStatus.CONFIRMED
-                    ? "bg-green-600 text-white"
-                    : "bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-300 hover:bg-green-100 dark:hover:bg-green-900/30"
-                }`}
-              >
-                Confermo ✓
-              </FormButton>
-            </form>
-            <form
-              action={updateParticipantStatus.bind(null, p.id, ParticipantStatus.DECLINED, eventId)}
-            >
-              <FormButton
-                type="submit"
-                className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-colors disabled:opacity-50 ${
-                  p.status === ParticipantStatus.DECLINED
-                    ? "bg-red-600 text-white"
-                    : "bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-300 hover:bg-red-100 dark:hover:bg-red-900/30"
-                }`}
-              >
-                Non vengo ✗
-              </FormButton>
-            </form>
-          </div>
-        )}
       </div>
     </li>
   );
