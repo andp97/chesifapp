@@ -71,6 +71,14 @@ export default async function EventPage({
           <p className="text-sm text-gray-400 dark:text-gray-500">
             {total} partecipant{total === 1 ? "e" : "i"}
           </p>
+          {event.startDate && (
+            <a
+              href={`/evento/${id}/calendar`}
+              className="text-xs font-medium text-gray-500 dark:text-gray-400 hover:text-blue-600 dark:hover:text-blue-400 border border-gray-300 dark:border-gray-600 rounded-lg px-2.5 py-1 transition-colors"
+            >
+              + Aggiungi al calendario
+            </a>
+          )}
         </div>
       </div>
 
