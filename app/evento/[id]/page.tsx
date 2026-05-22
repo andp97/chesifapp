@@ -159,10 +159,12 @@ function ParticipantRow({
               </span>
             )}
           </div>
-          <div className="flex items-center gap-2 mt-1 flex-wrap">
-            <StatusBadge status={p.status} />
-            <PaymentBadge paymentStatus={p.paymentStatus} />
-          </div>
+          {!hasAccess && (
+            <div className="flex items-center gap-2 mt-1 flex-wrap">
+              <StatusBadge status={p.status} />
+              <PaymentBadge paymentStatus={p.paymentStatus} />
+            </div>
+          )}
         </div>
 
         {hasAccess && (
