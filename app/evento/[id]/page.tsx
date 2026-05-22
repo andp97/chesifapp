@@ -8,6 +8,12 @@ import { InviteCodeForm } from "@/components/InviteCodeForm";
 import { FormButton } from "@/components/FormButton";
 import { formatEventDate } from "@/lib/dates";
 
+export async function generateMetadata({ params }: { params: Promise<{ id: string }> }) {
+  const { id } = await params;
+  const event = await prisma.event.findUnique({ where: { id }, select: { name: true } });
+  return { title: event ? `${event.name} — ChesifApp?` : "ChesifApp?" };
+}
+
 export default async function EventPage({
   params,
 }: {
