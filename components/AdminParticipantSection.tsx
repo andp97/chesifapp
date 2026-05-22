@@ -168,7 +168,7 @@ function AdminParticipantRow({
               </form>
             </div>
           </div>
-          <div className="flex gap-2 mt-1 flex-wrap items-center">
+          <div className="flex gap-2 mt-2 flex-wrap items-center">
             <StatusBadge status={p.status} />
             <PaymentBadge paymentStatus={p.paymentStatus} />
           </div>
