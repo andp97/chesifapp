@@ -45,10 +45,10 @@ export default function Home() {
                 </span>
                 <input
                   name="totalCost"
-                  type="number"
+                  type="text"
+                  inputMode="decimal"
                   required
-                  min="0"
-                  step="0.01"
+                  pattern="[0-9]*[.,]?[0-9]{0,2}"
                   placeholder="120.00"
                   className="flex-1 bg-white dark:bg-gray-800 px-3 py-2 text-sm text-gray-900 dark:text-white placeholder-gray-400 dark:placeholder-gray-500 focus:outline-none"
                 />

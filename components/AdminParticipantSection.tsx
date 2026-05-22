@@ -68,8 +68,9 @@ export function AdminParticipantSection({
           />
           <input
             name="quotes"
-            type="number"
-            min={1}
+            type="text"
+            inputMode="numeric"
+            pattern="[0-9]*"
             defaultValue={1}
             title="Numero di quote"
             className="w-16 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 px-2 py-2 text-sm text-center text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500"

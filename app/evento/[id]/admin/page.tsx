@@ -129,10 +129,10 @@ export default async function AdminPage({
             </label>
             <input
               name="totalCost"
-              type="number"
+              type="text"
+              inputMode="decimal"
               required
-              min="0"
-              step="0.01"
+              pattern="[0-9]*[.,]?[0-9]{0,2}"
               defaultValue={event.totalCost}
               className={inputCls}
             />
