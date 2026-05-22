@@ -140,38 +140,41 @@ function AdminParticipantRow({
   return (
     <li className={`px-5 py-3 ${highlight ? "bg-amber-50 dark:bg-amber-900/10" : ""}`}>
       <div className="flex items-center justify-between gap-2">
+        {/* Left: name + stepper stacked above badges */}
         <div className="min-w-0 flex-1">
-          <p className="font-medium truncate">{p.name}</p>
+          <div className="flex items-center gap-2">
+            <p className="font-medium truncate">{p.name}</p>
+            {/* Quotes stepper */}
+            <div className="flex items-center gap-0.5 bg-gray-100 dark:bg-gray-800 rounded-lg px-1 py-1 shrink-0">
+              <form action={updateParticipantQuotes.bind(null, p.id, p.quotes - 1, eventId)}>
+                <button
+                  type="submit"
+                  disabled={p.quotes <= 1}
+                  className="w-5 h-5 flex items-center justify-center rounded text-xs font-bold text-gray-500 dark:text-gray-400 hover:bg-gray-200 dark:hover:bg-gray-700 disabled:opacity-30 transition-colors"
+                >
+                  −
+                </button>
+              </form>
+              <span className="text-xs font-semibold text-gray-700 dark:text-gray-300 min-w-[1.25rem] text-center px-0.5">
+                {p.quotes}
+              </span>
+              <form action={updateParticipantQuotes.bind(null, p.id, p.quotes + 1, eventId)}>
+                <button
+                  type="submit"
+                  className="w-5 h-5 flex items-center justify-center rounded text-xs font-bold text-gray-500 dark:text-gray-400 hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors"
+                >
+                  +
+                </button>
+              </form>
+            </div>
+          </div>
           <div className="flex gap-2 mt-1 flex-wrap items-center">
             <StatusBadge status={p.status} />
             <PaymentBadge paymentStatus={p.paymentStatus} />
           </div>
         </div>
+        {/* Right: payment toggle + remove */}
         <div className="flex items-center gap-2 shrink-0">
-          {/* Quotes stepper */}
-          <div className="flex items-center gap-0.5 bg-gray-100 dark:bg-gray-800 rounded-lg px-1 py-1">
-            <form action={updateParticipantQuotes.bind(null, p.id, p.quotes - 1, eventId)}>
-              <button
-                type="submit"
-                disabled={p.quotes <= 1}
-                className="w-5 h-5 flex items-center justify-center rounded text-xs font-bold text-gray-500 dark:text-gray-400 hover:bg-gray-200 dark:hover:bg-gray-700 disabled:opacity-30 transition-colors"
-              >
-                −
-              </button>
-            </form>
-            <span className="text-xs font-semibold text-gray-700 dark:text-gray-300 min-w-[1.25rem] text-center px-0.5">
-              {p.quotes}
-            </span>
-            <form action={updateParticipantQuotes.bind(null, p.id, p.quotes + 1, eventId)}>
-              <button
-                type="submit"
-                className="w-5 h-5 flex items-center justify-center rounded text-xs font-bold text-gray-500 dark:text-gray-400 hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors"
-              >
-                +
-              </button>
-            </form>
-          </div>
-          {/* Payment toggle */}
           <form action={updatePaymentStatus.bind(null, p.id, nextPaymentStatus, eventId)}>
             <button
               type="submit"
@@ -184,7 +187,6 @@ function AdminParticipantRow({
               {p.paymentStatus === PaymentStatus.PAID ? "Pagato ✓" : "Segna pagato"}
             </button>
           </form>
-          {/* Remove */}
           <form action={removeParticipant.bind(null, p.id, eventId)}>
             <button
               type="submit"
