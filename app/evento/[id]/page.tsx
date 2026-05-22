@@ -5,6 +5,7 @@ import { updateParticipantStatus } from "@/lib/actions";
 import { ParticipantStatus, PaymentStatus } from "@/app/generated/prisma/enums";
 import type { Participant } from "@/app/generated/prisma/client";
 import { InviteCodeForm } from "@/components/InviteCodeForm";
+import { FormButton } from "@/components/FormButton";
 import { formatEventDate } from "@/lib/dates";
 
 export default async function EventPage({
@@ -169,30 +170,30 @@ function ParticipantRow({
             <form
               action={updateParticipantStatus.bind(null, p.id, ParticipantStatus.CONFIRMED, eventId)}
             >
-              <button
+              <FormButton
                 type="submit"
-                className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-colors ${
+                className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-colors disabled:opacity-50 ${
                   p.status === ParticipantStatus.CONFIRMED
                     ? "bg-green-600 text-white"
                     : "bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-300 hover:bg-green-100 dark:hover:bg-green-900/30"
                 }`}
               >
                 Confermo ✓
-              </button>
+              </FormButton>
             </form>
             <form
               action={updateParticipantStatus.bind(null, p.id, ParticipantStatus.DECLINED, eventId)}
             >
-              <button
+              <FormButton
                 type="submit"
-                className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-colors ${
+                className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-colors disabled:opacity-50 ${
                   p.status === ParticipantStatus.DECLINED
                     ? "bg-red-600 text-white"
                     : "bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-300 hover:bg-red-100 dark:hover:bg-red-900/30"
                 }`}
               >
                 Non vengo ✗
-              </button>
+              </FormButton>
             </form>
           </div>
         )}

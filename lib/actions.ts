@@ -52,25 +52,36 @@ export async function createEvent(formData: FormData) {
   redirect(`/evento/${event.id}/admin`);
 }
 
-export async function updateEvent(eventId: string, formData: FormData) {
-  const cookieStore = await cookies();
-  if (!cookieStore.get(`admin_${eventId}`)) return;
+export async function updateEvent(
+  eventId: string,
+  _prevState: { error?: string; success?: boolean },
+  formData: FormData
+): Promise<{ error?: string; success?: boolean }> {
+  try {
+    const cookieStore = await cookies();
+    if (!cookieStore.get(`admin_${eventId}`)) return { error: "Non autorizzato" };
 
-  const name = formData.get("name") as string;
-  const totalCost = parseFloat(formData.get("totalCost") as string);
-  const paymentInfo = (formData.get("paymentInfo") as string) ?? "";
-  const startDateRaw = formData.get("startDate") as string | null;
-  const endDateRaw = formData.get("endDate") as string | null;
-  const startDate = startDateRaw ? parseLocalDate(startDateRaw) : null;
-  const endDate = endDateRaw ? parseLocalDate(endDateRaw) : null;
+    const name = formData.get("name") as string;
+    const totalCost = parseFloat(formData.get("totalCost") as string);
+    const paymentInfo = (formData.get("paymentInfo") as string) ?? "";
+    const startDateRaw = formData.get("startDate") as string | null;
+    const endDateRaw = formData.get("endDate") as string | null;
+    const startDate = startDateRaw ? parseLocalDate(startDateRaw) : null;
+    const endDate = endDateRaw ? parseLocalDate(endDateRaw) : null;
 
-  await prisma.event.update({
-    where: { id: eventId },
-    data: { name, totalCost, paymentInfo, startDate, endDate },
-  });
+    if (!name || isNaN(totalCost)) return { error: "Dati non validi" };
 
-  revalidatePath(`/evento/${eventId}/admin`);
-  revalidatePath(`/evento/${eventId}`);
+    await prisma.event.update({
+      where: { id: eventId },
+      data: { name, totalCost, paymentInfo, startDate, endDate },
+    });
+
+    revalidatePath(`/evento/${eventId}/admin`);
+    revalidatePath(`/evento/${eventId}`);
+    return { success: true };
+  } catch {
+    return { error: "Errore durante il salvataggio" };
+  }
 }
 
 // ─── Admin auth ───────────────────────────────────────────────────────────────

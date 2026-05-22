@@ -10,6 +10,7 @@ import {
 } from "@/lib/actions";
 import { ParticipantStatus, PaymentStatus } from "@/app/generated/prisma/enums";
 import type { Participant } from "@/app/generated/prisma/client";
+import { FormButton } from "@/components/FormButton";
 
 const inputCls =
   "w-full rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 px-3 py-2 text-sm text-gray-900 dark:text-white placeholder-gray-400 dark:placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500";
@@ -147,24 +148,24 @@ function AdminParticipantRow({
             {/* Quotes stepper */}
             <div className="flex items-center gap-0.5 bg-gray-100 dark:bg-gray-800 rounded-lg px-1 py-1 shrink-0">
               <form action={updateParticipantQuotes.bind(null, p.id, p.quotes - 1, eventId)}>
-                <button
+                <FormButton
                   type="submit"
                   disabled={p.quotes <= 1}
                   className="w-5 h-5 flex items-center justify-center rounded text-xs font-bold text-gray-500 dark:text-gray-400 hover:bg-gray-200 dark:hover:bg-gray-700 disabled:opacity-30 transition-colors"
                 >
                   −
-                </button>
+                </FormButton>
               </form>
               <span className="text-xs font-semibold text-gray-700 dark:text-gray-300 min-w-[1.25rem] text-center px-0.5">
                 {p.quotes}
               </span>
               <form action={updateParticipantQuotes.bind(null, p.id, p.quotes + 1, eventId)}>
-                <button
+                <FormButton
                   type="submit"
                   className="w-5 h-5 flex items-center justify-center rounded text-xs font-bold text-gray-500 dark:text-gray-400 hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors"
                 >
                   +
-                </button>
+                </FormButton>
               </form>
             </div>
           </div>
@@ -176,24 +177,24 @@ function AdminParticipantRow({
         {/* Right: payment toggle + remove */}
         <div className="flex items-center gap-2 shrink-0">
           <form action={updatePaymentStatus.bind(null, p.id, nextPaymentStatus, eventId)}>
-            <button
+            <FormButton
               type="submit"
-              className={`px-2.5 py-1 rounded-lg text-xs font-medium transition-colors ${
+              className={`px-2.5 py-1 rounded-lg text-xs font-medium transition-colors disabled:opacity-50 ${
                 p.paymentStatus === PaymentStatus.PAID
                   ? "bg-emerald-600 text-white hover:bg-emerald-700"
                   : "bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-300 hover:bg-emerald-100 dark:hover:bg-emerald-900/30"
               }`}
             >
               {p.paymentStatus === PaymentStatus.PAID ? "Pagato ✓" : "Segna pagato"}
-            </button>
+            </FormButton>
           </form>
           <form action={removeParticipant.bind(null, p.id, eventId)}>
-            <button
+            <FormButton
               type="submit"
-              className="px-2 py-1 rounded-lg text-xs text-gray-400 hover:bg-red-50 dark:hover:bg-red-900/20 hover:text-red-600 dark:hover:text-red-400 transition-colors"
+              className="px-2 py-1 rounded-lg text-xs text-gray-400 hover:bg-red-50 dark:hover:bg-red-900/20 hover:text-red-600 dark:hover:text-red-400 transition-colors disabled:opacity-50"
             >
               ✕
-            </button>
+            </FormButton>
           </form>
         </div>
       </div>

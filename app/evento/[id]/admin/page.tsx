@@ -1,19 +1,15 @@
 import { notFound } from "next/navigation";
 import { cookies } from "next/headers";
 import { prisma } from "@/lib/prisma";
-import { updateEvent } from "@/lib/actions";
+
 import { ParticipantStatus, PaymentStatus } from "@/app/generated/prisma/enums";
 import { CopyButton } from "@/components/CopyButton";
 import { AdminCodeForm } from "@/components/AdminCodeForm";
 import { AdminParticipantSection } from "@/components/AdminParticipantSection";
 import { ShareRecapButton } from "@/components/ShareRecapButton";
+import { SaveEventForm } from "@/components/SaveEventForm";
 import { formatEventDate, toInputDate } from "@/lib/dates";
 
-const inputCls =
-  "w-full rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 px-3 py-2 text-sm text-gray-900 dark:text-white placeholder-gray-400 dark:placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500";
-
-const dateInputCls =
-  "w-full appearance-none rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 px-3 py-2 text-sm text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500 [color-scheme:light] dark:[color-scheme:dark]";
 
 export default async function AdminPage({
   params,
@@ -129,75 +125,14 @@ export default async function AdminPage({
 
       <AdminParticipantSection participants={event.participants} eventId={id} />
 
-      {/* Edit event */}
-      <div className="bg-white dark:bg-gray-900 rounded-2xl border border-gray-200 dark:border-gray-700 shadow-sm p-5">
-        <h2 className="font-semibold mb-4">Modifica evento</h2>
-        <form action={updateEvent.bind(null, id)} className="space-y-3">
-          <div>
-            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-              Nome evento
-            </label>
-            <input name="name" type="text" required defaultValue={event.name} className={inputCls} />
-          </div>
-          <div>
-            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-              Costo totale (€)
-            </label>
-            <input
-              name="totalCost"
-              type="text"
-              inputMode="decimal"
-              required
-              pattern="[0-9]*[.,]?[0-9]{0,2}"
-              defaultValue={event.totalCost}
-              className={inputCls}
-            />
-          </div>
-          <div>
-            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-              Data{" "}
-              <span className="text-gray-400 dark:text-gray-500 font-normal">(opzionale)</span>
-            </label>
-            <div className="grid grid-cols-2 gap-2">
-              <div>
-                <label className="block text-xs text-gray-500 dark:text-gray-400 mb-1">Inizio</label>
-                <input
-                  name="startDate"
-                  type="date"
-                  defaultValue={event.startDate ? toInputDate(event.startDate) : ""}
-                  className={dateInputCls}
-                />
-              </div>
-              <div>
-                <label className="block text-xs text-gray-500 dark:text-gray-400 mb-1">Fine (se periodo)</label>
-                <input
-                  name="endDate"
-                  type="date"
-                  defaultValue={event.endDate ? toInputDate(event.endDate) : ""}
-                  className={dateInputCls}
-                />
-              </div>
-            </div>
-          </div>
-          <div>
-            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-              Info pagamento
-            </label>
-            <textarea
-              name="paymentInfo"
-              rows={3}
-              defaultValue={event.paymentInfo}
-              className={`${inputCls} resize-none`}
-            />
-          </div>
-          <button
-            type="submit"
-            className="w-full bg-gray-800 dark:bg-gray-700 hover:bg-gray-900 dark:hover:bg-gray-600 text-white font-medium rounded-lg py-2 text-sm transition-colors"
-          >
-            Salva modifiche
-          </button>
-        </form>
-      </div>
+      <SaveEventForm
+        eventId={id}
+        defaultName={event.name}
+        defaultTotalCost={event.totalCost}
+        defaultPaymentInfo={event.paymentInfo ?? ""}
+        defaultStartDate={event.startDate ? toInputDate(event.startDate) : ""}
+        defaultEndDate={event.endDate ? toInputDate(event.endDate) : ""}
+      />
     </main>
   );
 }
