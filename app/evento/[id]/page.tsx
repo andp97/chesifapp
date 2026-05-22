@@ -31,18 +31,24 @@ export default async function EventPage({
     (p) => p.status === ParticipantStatus.PENDING
   ).length;
   const total = event.participants.length;
-  const costPerPerson =
-    confirmed > 0
-      ? event.totalCost / confirmed
-      : total > 0
-        ? event.totalCost / total
+
+  const confirmedShares = event.participants
+    .filter((p) => p.status === ParticipantStatus.CONFIRMED)
+    .reduce((sum, p) => sum + p.quotes, 0);
+  const totalShares = event.participants.reduce((sum, p) => sum + p.quotes, 0);
+
+  const costPerShare =
+    confirmedShares > 0
+      ? event.totalCost / confirmedShares
+      : totalShares > 0
+        ? event.totalCost / totalShares
         : event.totalCost;
 
   const costLabel =
-    confirmed > 0
-      ? `${confirmed} confermati → €${costPerPerson.toFixed(2)} a testa`
-      : total > 0
-        ? `Nessuno ancora — €${costPerPerson.toFixed(2)} a testa (su tutti)`
+    confirmedShares > 0
+      ? `${confirmed} confermati → €${costPerShare.toFixed(2)} a quota`
+      : totalShares > 0
+        ? `Nessuno ancora — €${costPerShare.toFixed(2)} a quota (su tutti)`
         : `€${event.totalCost.toFixed(2)} totale`;
 
   return (
@@ -103,6 +109,7 @@ export default async function EventPage({
                 participant={p}
                 eventId={id}
                 hasAccess={hasAccess}
+                costPerShare={costPerShare}
               />
             ))}
           </ul>
@@ -132,16 +139,25 @@ function ParticipantRow({
   participant: p,
   eventId,
   hasAccess,
+  costPerShare,
 }: {
   participant: Participant;
   eventId: string;
   hasAccess: boolean;
+  costPerShare: number;
 }) {
   return (
     <li className="px-5 py-4">
       <div className="flex items-center justify-between gap-3">
         <div className="min-w-0 flex-1">
-          <p className="font-medium truncate">{p.name}</p>
+          <div className="flex items-center gap-2">
+            <p className="font-medium truncate">{p.name}</p>
+            {p.quotes > 1 && (
+              <span className="shrink-0 text-xs font-semibold text-blue-600 dark:text-blue-400 bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-700 rounded-full px-2 py-0.5">
+                ×{p.quotes} — €{(costPerShare * p.quotes).toFixed(2)}
+              </span>
+            )}
+          </div>
           <div className="flex items-center gap-2 mt-1 flex-wrap">
             <StatusBadge status={p.status} />
             <PaymentBadge paymentStatus={p.paymentStatus} />

@@ -27,6 +27,7 @@ model Participant {
   name          String
   status        ParticipantStatus @default(PENDING)
   paymentStatus PaymentStatus     @default(UNPAID)
+  quotes        Int               @default(1)
   createdAt     DateTime          @default(now())
 }
 

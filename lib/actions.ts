@@ -121,14 +121,38 @@ export async function verifyInviteCode(
 
 // ─── Participants ─────────────────────────────────────────────────────────────
 
-export async function addParticipant(eventId: string, formData: FormData) {
+export async function addParticipant(
+  eventId: string,
+  _prevState: { error?: string },
+  formData: FormData
+): Promise<{ error?: string }> {
   const name = (formData.get("name") as string)?.trim();
-  if (!name) return;
+  if (!name) return { error: "Nome obbligatorio" };
 
+  const cookieStore = await cookies();
+  if (!cookieStore.get(`admin_${eventId}`)) return { error: "Non autorizzato" };
+
+  const quotes = Math.max(1, parseInt(formData.get("quotes") as string) || 1);
+
+  await prisma.participant.create({ data: { eventId, name, quotes } });
+
+  revalidatePath(`/evento/${eventId}/admin`);
+  revalidatePath(`/evento/${eventId}`);
+  return {};
+}
+
+export async function updateParticipantQuotes(
+  participantId: string,
+  quotes: number,
+  eventId: string
+) {
   const cookieStore = await cookies();
   if (!cookieStore.get(`admin_${eventId}`)) return;
 
-  await prisma.participant.create({ data: { eventId, name } });
+  await prisma.participant.update({
+    where: { id: participantId },
+    data: { quotes: Math.max(1, quotes) },
+  });
 
   revalidatePath(`/evento/${eventId}/admin`);
   revalidatePath(`/evento/${eventId}`);

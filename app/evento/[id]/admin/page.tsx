@@ -1,16 +1,11 @@
 import { notFound } from "next/navigation";
 import { cookies } from "next/headers";
 import { prisma } from "@/lib/prisma";
-import {
-  addParticipant,
-  removeParticipant,
-  updatePaymentStatus,
-  updateEvent,
-} from "@/lib/actions";
+import { updateEvent } from "@/lib/actions";
 import { ParticipantStatus, PaymentStatus } from "@/app/generated/prisma/enums";
-import type { Participant } from "@/app/generated/prisma/client";
 import { CopyButton } from "@/components/CopyButton";
 import { AdminCodeForm } from "@/components/AdminCodeForm";
+import { AdminParticipantSection } from "@/components/AdminParticipantSection";
 import { formatEventDate, toInputDate } from "@/lib/dates";
 
 const inputCls =
@@ -116,41 +111,7 @@ export default async function AdminPage({
         </div>
       </div>
 
-      {/* Add participant */}
-      <div className="bg-white dark:bg-gray-900 rounded-2xl border border-gray-200 dark:border-gray-700 shadow-sm p-5 mb-6">
-        <h2 className="font-semibold mb-3">Aggiungi partecipante</h2>
-        <form action={addParticipant.bind(null, id)} className="flex gap-2">
-          <input
-            name="name"
-            type="text"
-            required
-            placeholder="Nome e cognome"
-            className={`${inputCls} flex-1`}
-          />
-          <button
-            type="submit"
-            className="bg-blue-600 hover:bg-blue-700 text-white font-medium rounded-lg px-4 py-2 text-sm transition-colors whitespace-nowrap"
-          >
-            + Aggiungi
-          </button>
-        </form>
-      </div>
-
-      {/* Participant list */}
-      <div className="bg-white dark:bg-gray-900 rounded-2xl border border-gray-200 dark:border-gray-700 shadow-sm overflow-hidden mb-6">
-        <div className="px-5 py-4 border-b border-gray-100 dark:border-gray-700">
-          <h2 className="font-semibold">Partecipanti</h2>
-        </div>
-        {event.participants.length === 0 ? (
-          <p className="px-5 py-4 text-sm text-gray-400 dark:text-gray-500">Nessun partecipante ancora.</p>
-        ) : (
-          <ul className="divide-y divide-gray-100 dark:divide-gray-700">
-            {event.participants.map((p) => (
-              <AdminParticipantRow key={p.id} participant={p} eventId={id} />
-            ))}
-          </ul>
-        )}
-      </div>
+      <AdminParticipantSection participants={event.participants} eventId={id} />
 
       {/* Edit event */}
       <div className="bg-white dark:bg-gray-900 rounded-2xl border border-gray-200 dark:border-gray-700 shadow-sm p-5">
@@ -248,47 +209,6 @@ function AdminCodeGate({ eventId, eventName }: { eventId: string; eventName: str
   );
 }
 
-function AdminParticipantRow({ participant: p, eventId }: { participant: Participant; eventId: string }) {
-  const nextPaymentStatus =
-    p.paymentStatus === PaymentStatus.PAID ? PaymentStatus.UNPAID : PaymentStatus.PAID;
-
-  return (
-    <li className="px-5 py-3">
-      <div className="flex items-center justify-between gap-2">
-        <div className="min-w-0 flex-1">
-          <p className="font-medium truncate">{p.name}</p>
-          <div className="flex gap-2 mt-1 flex-wrap">
-            <StatusBadge status={p.status} />
-            <PaymentBadge paymentStatus={p.paymentStatus} />
-          </div>
-        </div>
-        <div className="flex items-center gap-2 shrink-0">
-          <form action={updatePaymentStatus.bind(null, p.id, nextPaymentStatus, eventId)}>
-            <button
-              type="submit"
-              className={`px-2.5 py-1 rounded-lg text-xs font-medium transition-colors ${
-                p.paymentStatus === PaymentStatus.PAID
-                  ? "bg-emerald-600 text-white hover:bg-emerald-700"
-                  : "bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-300 hover:bg-emerald-100 dark:hover:bg-emerald-900/30"
-              }`}
-            >
-              {p.paymentStatus === PaymentStatus.PAID ? "Pagato ✓" : "Segna pagato"}
-            </button>
-          </form>
-          <form action={removeParticipant.bind(null, p.id, eventId)}>
-            <button
-              type="submit"
-              className="px-2 py-1 rounded-lg text-xs text-gray-400 hover:bg-red-50 dark:hover:bg-red-900/20 hover:text-red-600 dark:hover:text-red-400 transition-colors"
-            >
-              ✕
-            </button>
-          </form>
-        </div>
-      </div>
-    </li>
-  );
-}
-
 function StatCard({ label, value, color = "blue" }: { label: string; value: number; color?: "blue" | "green" | "emerald" }) {
   const colorMap = { blue: "text-blue-600 dark:text-blue-400", green: "text-green-600 dark:text-green-400", emerald: "text-emerald-600 dark:text-emerald-400" };
   return (
@@ -299,24 +219,3 @@ function StatCard({ label, value, color = "blue" }: { label: string; value: numb
   );
 }
 
-function StatusBadge({ status }: { status: ParticipantStatus }) {
-  const map: Record<ParticipantStatus, { label: string; className: string }> = {
-    PENDING: { label: "In attesa", className: "bg-gray-100 dark:bg-gray-700 text-gray-500 dark:text-gray-400" },
-    CONFIRMED: { label: "Confermato", className: "bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-400" },
-    DECLINED: { label: "Non viene", className: "bg-red-100 dark:bg-red-900/30 text-red-700 dark:text-red-400" },
-  };
-  const { label, className } = map[status];
-  return <span className={`rounded-full px-2 py-0.5 text-xs font-medium ${className}`}>{label}</span>;
-}
-
-function PaymentBadge({ paymentStatus }: { paymentStatus: PaymentStatus }) {
-  return paymentStatus === PaymentStatus.PAID ? (
-    <span className="rounded-full px-2 py-0.5 text-xs font-medium bg-emerald-100 dark:bg-emerald-900/30 text-emerald-700 dark:text-emerald-400">
-      Pagato ✓
-    </span>
-  ) : (
-    <span className="rounded-full px-2 py-0.5 text-xs font-medium bg-yellow-100 dark:bg-yellow-900/30 text-yellow-700 dark:text-yellow-400">
-      Da pagare
-    </span>
-  );
-}
