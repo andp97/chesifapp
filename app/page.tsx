@@ -37,17 +37,22 @@ export default function Home() {
 
             <div>
               <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-                Costo totale (€)
+                Costo totale
               </label>
-              <input
-                name="totalCost"
-                type="number"
-                required
-                min="0"
-                step="0.01"
-                placeholder="es. 120.00"
-                className={inputCls}
-              />
+              <div className="flex rounded-lg border border-gray-300 dark:border-gray-600 focus-within:ring-2 focus-within:ring-blue-500 overflow-hidden">
+                <span className="flex items-center px-3 bg-gray-100 dark:bg-gray-700 text-gray-500 dark:text-gray-400 text-sm border-r border-gray-300 dark:border-gray-600 select-none">
+                  €
+                </span>
+                <input
+                  name="totalCost"
+                  type="number"
+                  required
+                  min="0"
+                  step="0.01"
+                  placeholder="120.00"
+                  className="flex-1 bg-white dark:bg-gray-800 px-3 py-2 text-sm text-gray-900 dark:text-white placeholder-gray-400 dark:placeholder-gray-500 focus:outline-none"
+                />
+              </div>
             </div>
 
             <div>
